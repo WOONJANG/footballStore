@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>축구 클럽 스토어 링크</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    body {
+      background: linear-gradient(to right, #f8f9fa, #e9ecef);
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .btn-category.active {
+      font-weight: bold;
+      background-color: #0d6efd;
+      color: #fff !important;
+    }
+    .btn-league {
+      margin: 6px;
+    }
+    .team-list a {
+      display: inline-block;
+      margin: 4px 6px;
+      padding: 6px 12px;
+      background: #fff;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      text-decoration: none;
+      color: #212529;
+      transition: all 0.2s ease-in-out;
+    }
+    .team-list a:hover {
+      background-color: #e2e6ea;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body class="p-4">
+  <div class="container">
+    <h2 class="mb-4">축구 클럽 공식 스토어 링크</h2>
+
+    <!-- 카테고리 선택 -->
+    <div>
+      <button class="btn btn-outline-primary btn-category" data-category="men">남자축구</button>
+      <button class="btn btn-outline-danger btn-category" data-category="women">여자축구</button>
+    </div>
+
+    <!-- 남자 리그 선택 -->
+    <div class="league-section" id="men-leagues" style="display:none;">
+      <h4 class="mt-4">남자 리그 선택</h4>
+      <div class="d-flex flex-wrap">
+        <button class="btn btn-outline-dark btn-league" data-league="대한민국">대한민국</button>
+        <button class="btn btn-outline-dark btn-league" data-league="잉글랜드">잉글랜드</button>
+        <button class="btn btn-outline-dark btn-league" data-league="프랑스">프랑스</button>
+        <button class="btn btn-outline-dark btn-league" data-league="독일">독일</button>
+        <button class="btn btn-outline-dark btn-league" data-league="스페인">스페인</button>
+        <button class="btn btn-outline-dark btn-league" data-league="이탈리아">이탈리아</button>
+        <button class="btn btn-outline-dark btn-league" data-league="일본">일본</button>
+      </div>
+    </div>
+
+    <!-- 여자 리그 선택 -->
+    <div class="league-section" id="women-leagues" style="display:none;">
+      <h4 class="mt-4">여자 리그 선택</h4>
+      <div class="text-muted">업데이트 예정</div>
+    </div>
+
+    <!-- 팀 출력 영역 -->
+    <div id="team-container" class="mt-4"></div>
+  </div>
+
+  <script>
+        const storeData = {
+      "대한민국": [
+        {"name": "강원 FC", "url": "https://gangwon-fc.imweb.me/"},
+        {"name": "광주 FC", "url": "https://www.gjfcshop.com/"},
+        {"name": "김천 상무 FC", "url": "https://gimcheonfcshop.com/"},
+        {"name": "대구 FC", "url": "https://daegufcmall.co.kr/"},
+        {"name": "대전 하나 시티즌", "url": "https://store.dhcfc.kr/"},
+        {"name": "FC 서울", "url": "https://www.fcseoulshop.com/"},
+        {"name": "수원 FC", "url": "https://www.suwonfcmall.com/"},
+        {"name": "FC 안양", "url": "https://www.fc-anyang-store.com/"},
+        {"name": "울산 HD FC", "url": "https://uhdshop.co.kr/"},
+        {"name": "전북 현대 모터스", "url": "https://shop.hyundai-motorsfc.com/"},
+        {"name": "제주 SK FC", "url": "https://www.jejuskfc-fanstore.com/"},
+        {"name": "포항 스틸러스", "url": "https://www.fcphshop.com/"},
+        {"name": "경남 FC", "url": "https://www.gfc-megastore.com/"},
+        {"name": "김포 FC", "url": "https://www.gimpofcmall.co.kr/index.html"},
+        {"name": "부산 아이파크", "url": "https://busaniparkfanshop.com/"},
+        {"name": "부천 FC 1995", "url": "http://bfcmarket.com/"},
+        {"name": "서울 이랜드 FC", "url": "https://www.leoulshop.com/"},
+        {"name": "성남 FC", "url": "https://www.shopsfc.com/"},
+        {"name": "수원 삼성 블루윙즈", "url": "https://www.bluewingsshop.com/"},
+        {"name": "안산 그리너스 FC", "url": "https://www.interparkmdshop.com/category/%EC%95%88%EC%82%B0%EA%B7%B8%EB%A6%AC%EB%84%88%EC%8A%A4FC/123/"},
+        {"name": "인천 유나이티드 FC", "url": "https://www.incheonutdmarket.com/"},
+        {"name": "전남 드래곤즈", "url": "https://www.jdfcstore.com/"},
+        {"name": "충남 아산 FC", "url": "http://store.asanfc.com/"},
+        {"name": "충북 청주 FC", "url": "https://chfc-shop.co.kr/"},
+        {"name": "천안 시티 FC", "url": "https://www.ccfc-shop.co.kr/"},
+        {"name": "화성 FC", "url": "-"}
+      ],
+      "프랑스": [
+        {"name": "파리 생제르맹", "url": "https://store.psg.fr"},
+        {"name": "올랭피크 마르세유", "url": "https://boutique.om.fr/"},
+        {"name": "AS 모나코", "url": "https://shop.asmonaco.com"},
+        {"name": "올랭피크 리옹", "url": "https://boutique.ol.fr"},
+        {"name": "릴 OSC", "url": "https://boutique-losc.fr"},
+        {"name": "OGC 니스", "url": "https://ogcnice.com/boutique"},
+        {"name": "스타드 렌", "url": "https://boutique.staderennais.com"},
+        {"name": "RC 랑스", "url": "https://boutique.rclens.fr"},
+        {"name": "RC 스트라스부르", "url": "https://boutique.rcstrasbourgalsace.fr"},
+        {"name": "스타드 브레스트", "url": "https://boutique.sb29.bzh"},
+        {"name": "툴루즈 FC", "url": "https://boutique.toulousefc.com"},
+        {"name": "AJ 오세르", "url": "https://boutique.aja.fr"},
+        {"name": "르 아브르 AC", "url": "https://boutique.hac.football"},
+        {"name": "FC 낭트", "url": "https://boutique.fcnantes.com"},
+        {"name": "스타드 드 랭스", "url": "https://boutique.stade-de-reims.com"},
+        {"name": "몽펠리에 HSC", "url": "https://www.montpellierboutique.com"},
+        {"name": "AS 생테티엔", "url": "https://boutique.asse.fr"},
+        {"name": "앙제 SCO", "url": "https://boutique.angers-sco.fr"}
+      ],
+      "잉글랜드": [
+        {"name": "노팅엄", "url": "https://shop.nottinghamforest.co.uk/"},
+        {"name": "뉴캐슬", "url": "https://shop.nufc.co.uk"},
+        {"name": "레스터", "url": "https://shop.lcfc.com"},
+        {"name": "리버풀", "url": "https://store.liverpoolfc.com"},
+        {"name": "맨시티", "url": "https://shop.mancity.com"},
+        {"name": "맨유", "url": "https://store.manutd.com"},
+        {"name": "본머스", "url": "https://superstore.afcb.co.uk"},
+        {"name": "브라이튼", "url": "https://shop.brightonandhovealbion.com"},
+        {"name": "브렌트포드", "url": "https://shop.brentfordfc.com"},
+        {"name": "사우스햄튼", "url": "https://store.southamptonfc.com"},
+        {"name": "아스날", "url": "https://store.arsenal.com"},
+        {"name": "아스톤 빌라", "url": "https://shop.avfc.co.uk"},
+        {"name": "애버튼", "url": "https://evertondirect.evertonfc.com"},
+        {"name": "울버햄튼", "url": "https://shop.wolves.co.uk"},
+        {"name": "웨스트햄", "url": "https://shop.whufc.com/"},
+        {"name": "입스위치", "url": "https://shop.itfc.co.uk/"},
+        {"name": "첼시", "url": "https://store.chelseafc.com/en/?_s=bm-FI-PSC-CFC-ShopNavEN"},
+        {"name": "토트넘", "url": "https://shop.tottenhamhotspur.com"},
+        {"name": "펠리스", "url": "https://shop.cpfc.co.uk/"},
+        {"name": "풀럼", "url": "https://shop.fulhamfc.com"}
+      ],
+      "독일": [
+        {"name": "FC 아우크스부르크", "url": "https://shop.fcaugsburg.de/"},
+        {"name": "FC 우니온 베를린", "url": "https://www.union-zeughaus.de/"},
+        {"name": "VfL 보훔", "url": "https://shop.vfl-bochum.de/"},
+        {"name": "SV 베르더 브레멘", "url": "https://shop.werder.de/"},
+        {"name": "보루시아 도르트문트", "url": "https://shop.bvb.de/"},
+        {"name": "아인트라흐트 프랑크푸르트", "url": "https://shop.eintracht.de/"},
+        {"name": "SC 프라이부르크", "url": "https://shop.scfreiburg.com/"},
+        {"name": "FC 하이덴하임", "url": "https://shop.fc-heidenheim.de/"},
+        {"name": "TSG 호펜하임", "url": "https://shop.tsg-hoffenheim.de/"},
+        {"name": "홀슈타인 킬", "url": "https://shop.holstein-kiel.de/"},
+        {"name": "RB 라이프치히", "url": "https://shop.dierotenbullen.com/"},
+        {"name": "바이어 04 레버쿠젠", "url": "https://shop.bayer04.de/"},
+        {"name": "FSV 마인츠 05", "url": "https://shop.mainz05.de/"},
+        {"name": "보루시아 묀헨글라트바흐", "url": "https://shop.borussia.de/"},
+        {"name": "FC 바이에른 뮌헨", "url": "https://fcbayern.com/shop"},
+        {"name": "FC 장크트 파울리", "url": "https://shop.fcstpauli.com/"},
+        {"name": "VfB 슈투트가르트", "url": "https://shop.vfb.de/"},
+        {"name": "VfL 볼프스부르크", "url": "https://shop.vfl-wolfsburg.de/"}
+      ],
+      "스페인": [
+        {"name": "아틀레틱 클럽", "url": "https://store.athletic-club.eus/"},
+        {"name": "아틀레티코 마드리드", "url": "https://shop.atleticodemadrid.com/"},
+        {"name": "오사수나", "url": "https://store.osasuna.es/"},
+        {"name": "CD 레가네스", "url": "https://store.cdleganes.com/en"},
+        {"name": "데포르티보 알라베스", "url": "https://shop.deportivoalaves.com/"},
+        {"name": "FC 바르셀로나", "url": "https://store.fcbarcelona.com/"},
+        {"name": "헤타페 CF", "url": "https://tienda.getafecf.com/"},
+        {"name": "지로나 FC", "url": "https://shop.gironafc.cat/"},
+        {"name": "라요 바예카노", "url": "https://tiendarayovallecano.es/"},
+        {"name": "셀타 비고", "url": "https://shop.rccelta.es/"},
+        {"name": "RCD 에스파뇰", "url": "https://shop.rcdespanyol.com/"},
+        {"name": "RCD 마요르카", "url": "https://shop.rcdmallorca.es/"},
+        {"name": "레알 베티스", "url": "https://shop.realbetisbalompie.es/"},
+        {"name": "레알 마드리드", "url": "https://shop.realmadrid.com/"},
+        {"name": "레알 소시에다드", "url": "https://shop.realsociedad.eus/"},
+        {"name": "세비야 FC", "url": "https://shop.sevillafc.es/"},
+        {"name": "발렌시아 CF", "url": "https://shop.valenciacf.com/"},
+        {"name": "레알 바야돌리드", "url": "https://shop.realvalladolid.es/"},
+        {"name": "비야레알 CF", "url": "https://shop.villarrealcf.es/"},
+        {"name": "UD 라스 팔마스", "url": "https://tienda.udlaspalmas.es/"}
+      ],
+      "이탈리아": [
+        {"name": "아탈란타 BC", "url": "https://store.atalanta.it/"},
+        {"name": "볼로냐 FC", "url": "https://store.bolognafc.it/"},
+        {"name": "칼리아리 칼초", "url": "https://store.cagliaricalcio.com/"},
+        {"name": "코모 1907", "url": "https://shop.como1907.net/"},
+        {"name": "엠폴리 FC", "url": "https://empolifc.com/online-shop/"},
+        {"name": "ACF 피오렌티나", "url": "https://store.acffiorentina.com/"},
+        {"name": "제노아 CFC", "url": "https://genoacfc.it/store-genoa/"},
+        {"name": "엘라스 베로나 FC", "url": "https://store.hellasverona.it/"},
+        {"name": "FC 인테르나치오날레 밀라노", "url": "https://store.inter.it/"},
+        {"name": "유벤투스 FC", "url": "https://store.juventus.com/"},
+        {"name": "SS 라치오", "url": "https://store.sslazio.it/"},
+        {"name": "US 레체", "url": "https://shop.uslecce.it/"},
+        {"name": "AC 밀란", "url": "https://store.acmilan.com/"},
+        {"name": "AC 몬차", "url": "https://store.acmonza.com/"},
+        {"name": "SSC 나폴리", "url": "https://store.sscnapoli.it/"},
+        {"name": "파르마 칼초 1913", "url": "https://shop.parmacalcio1913.com/"},
+        {"name": "AS 로마", "url": "https://store.asroma.com/"},
+        {"name": "토리노 FC", "url": "https://store.torinofc.it/"},
+        {"name": "우디네세 칼초", "url": "https://store.udinese.it/"},
+        {"name": "베네치아 FC", "url": "https://shop.veneziafc.it/"}
+      ],
+      "일본": [
+    {"name": "홋카이도 콘사돌레 삿포로", "url": "https://store.consadole-sapporo.jp/"},
+    {"name": "베갈타 센다이", "url": "https://store.jleague.jp/club/sendai/"},
+    {"name": "몬테디오 야마가타", "url": "https://store.jleague.jp/club/yamagata/"},
+    {"name": "미토 홀리호크", "url": "https://store.jleague.jp/club/mito/"},
+    {"name": "가시마 앤틀러스", "url": "https://store.antlers.co.jp/"},
+    {"name": "우라와 레드 다이아몬즈", "url": "https://store.jleague.jp/club/urawa/"},
+    {"name": "오미야 아르디자", "url": "https://store.jleague.jp/club/omiya/"},
+    {"name": "제프 유나이티드 이치하라 지바", "url": "https://store.jleague.jp/club/jefunited/"},
+    {"name": "FC 도쿄", "url": "https://store.jleague.jp/club/fctokyo/"},
+    {"name": "도쿄 베르디", "url": "https://store.jleague.jp/club/verdy/"},
+    {"name": "요코하마 F. 마리노스", "url": "https://store.f-marinos.com/"},
+    {"name": "요코하마 FC", "url": "https://store.jleague.jp/club/yokohamafc/"},
+    {"name": "가와사키 프론탈레", "url": "https://store.jleague.jp/club/frontale/"},
+    {"name": "쇼난 벨마레", "url": "https://store.jleague.jp/club/bellmare/"},
+    {"name": "알비렉스 니가타", "url": "https://store.jleague.jp/club/niigata/"},
+    {"name": "마치다 젤비아", "url": "https://store.jleague.jp/club/machida/"},
+    {"name": "나고야 그램퍼스", "url": "https://store.jleague.jp/club/nagoya/"},
+    {"name": "교토 상가 FC", "url": "https://store.jleague.jp/club/kyoto/"},
+    {"name": "감바 오사카", "url": "https://store.jleague.jp/club/gamba/"},
+    {"name": "세레소 오사카", "url": "https://store.jleague.jp/club/cerezo/"},
+    {"name": "비셀 고베", "url": "https://store.jleague.jp/club/kobe/"},
+    {"name": "산프레체 히로시마", "url": "https://store.jleague.jp/club/hiroshima/"},
+    {"name": "에히메 FC", "url": "https://store.jleague.jp/club/ehime/"},
+    {"name": "오이타 트리니타", "url": "https://store.jleague.jp/club/oita/"},
+    {"name": "사간 도스", "url": "https://store.jleague.jp/club/tosu/"},
+    {"name": "토쿠시마 보르티스", "url": "https://store.jleague.jp/club/tokushima/"},
+    {"name": "카탈레 토야마", "url": "https://store.jleague.jp/club/toyama/"},
+    {"name": "가고시마 유나이티드 FC", "url": "https://store.jleague.jp/club/kagoshima/"},
+    {"name": "FC 기후", "url": "https://store.jleague.jp/club/gifu/"},
+    {"name": "FC 이마바리", "url": "https://store.jleague.jp/club/imabari/"},
+    {"name": "기라반츠 기타큐슈", "url": "https://store.jleague.jp/club/kitakyushu/"}
+  ]
+    };
+
+    $(function () {
+      $('.btn-category').click(function () {
+        $('.btn-category').removeClass('active');
+        $(this).addClass('active');
+
+        const category = $(this).data('category');
+        $('.league-section').hide();
+        $('#team-container').empty();
+        $(`#${category}-leagues`).show();
+      });
+
+      $('.btn-league').click(function () {
+        const league = $(this).data('league');
+        const teams = storeData[league] || [];
+        let html = `<div class="team-list"><h5>${league}</h5>`;
+        for (let team of teams) {
+          html += `<a href="${team.url}" target="_blank">${team.name}</a>`;
+        }
+        html += `</div>`;
+        $('#team-container').html(html);
+      });
+    });
+  </script>
+</body>
+</html>
