@@ -241,28 +241,32 @@
   ]
     };
 
-    $(function () {
-      $('.btn-category').click(function () {
-        $('.btn-category').removeClass('active');
-        $(this).addClass('active');
+$(function () {
+    $('.btn-category').click(function () {
+      $('.btn-category').removeClass('active');
+      $(this).addClass('active');
 
-        const category = $(this).data('category');
-        $('.league-section').hide();
-        $('#team-container').empty();
-        $(`#${category}-leagues`).show();
-      });
-
-      $('.btn-league').click(function () {
-        const league = $(this).data('league');
-        const teams = storeData[league] || [];
-        let html = `<div class="team-list"><h5>${league}</h5>`;
-        for (let team of teams) {
-          html += `<a href="${team.url}" target="_blank">${team.name}</a>`;
-        }
-        html += `</div>`;
-        $('#team-container').html(html);
-      });
+      const category = $(this).data('category');
+      $('.league-section').hide();
+      $('.league-block').empty();
+      $(`#${category}-leagues`).show();
     });
-  </script>
+
+    $('.btn-league').click(function () {
+      const league = $(this).data('league');
+      const teams = storeData[league] || [];
+      let html = `<div class="team-list"><h5>${league}</h5>`;
+      for (let team of teams) {
+        if (team.url === '-' || team.url.trim() === '') {
+  html += `<a href="#" onclick=\"alert('스토어 없음'); return false;\">${team.name}</a>`;
+} else {
+  html += `<a href="${team.url}" target="_blank">${team.name}</a>`;
+}
+      }
+      html += `</div>`;
+      $('#team-container').html(html);
+    });
+  });
+</script>
 </body>
 </html>
